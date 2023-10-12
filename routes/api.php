@@ -15,8 +15,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::get('/post',[\App\Http\Controllers\PostController::class,'index'])->name('post.index');
+Route::get('/post/{post}', [\App\Http\Controllers\PostController::class,'show'])->name('post.show');
+Route::post('/post', [\App\Http\Controllers\PostController::class,'store'])->name('post.store');
+//Route::post();
+//Route::patch();
+//Route::delete();
 
-Route::get('todo-list',[TodolistController::class,'index'])->name('todolist.index');
+//Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//    return $request->user();
+//});
+
