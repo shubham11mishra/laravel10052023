@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Comment;
 use App\Models\Post;
+use App\Models\todo;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -26,6 +27,10 @@ class DatabaseSeeder extends Seeder
 //            ->has(Comment::factory(3), 'comments')
 //            ->create();
 
-//            Comment::factory(3)->for(Post::factory(1),'post');
+
+        User::factory(10)
+            ->has(todo::factory(5), 'todos')
+            ->create();
+//        todo::factory()->create();
     }
 }

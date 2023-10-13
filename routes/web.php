@@ -16,3 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::get('/todo',[\App\Http\Controllers\TodoController::class,'index'])->name('todo.index');
+Route::post('/todo/store',[\App\Http\Controllers\TodoController::class,'store'])->name('todo.store');
