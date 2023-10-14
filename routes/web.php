@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,10 +14,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+//Route::get('/', function () {
+//    $title = fake()->sentence();
+//    dump([
+//        'title' => $title,
+//        'meta_title' => $title,
+//        'slug' => Str::slug($title,'-'),
+//        'summery' => fake()->paragraph(3),
+//        'published' => true,
+//        'content' => fake()->paragraph(20),
+//        'published_at' => fake()->dateTimeThisCentury,
+//        'user_id' => 1
+//    ]);
+//    return [1];
+//});
 
 
-Route::get('/todo',[\App\Http\Controllers\TodoController::class,'index'])->name('todo.index');
-Route::post('/todo/store',[\App\Http\Controllers\TodoController::class,'store'])->name('todo.store');
+Route::get('/',[\App\Http\Controllers\PostController::class,'index'])->name('post.index');
+Route::get('/{post}',[\App\Http\Controllers\PostController::class,'show'])->name('post.show');

@@ -12,9 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('posts', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->unsignedBigInteger('parent_id')->nullable();
             $table->string('title');
-            $table->json('body')->nullable();
+            $table->string('meta_title');
+            $table->string('slug')->unique()->index();
+            $table->text('summary');
+            $table->boolean('published');
+            $table->longText('content');
+            $table->date('published_at');
             $table->timestamps();
         });
     }

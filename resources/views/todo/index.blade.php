@@ -11,7 +11,7 @@
 
 <!-- component -->
 <section>
-    <form  action="{{route('todo.store')}}" method="post" class="">
+    <form class="mt-5"  action="{{route('todo.store')}}" method="post" class="">
         @csrf
         <input type="text" name="title" placeholder="title" value="{{old('title')}}" class="border">
         <input type="submit" name="submit" >

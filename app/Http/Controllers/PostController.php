@@ -18,9 +18,10 @@ class PostController extends Controller
      */
     public function index()
     {
-        $response = Post::query()->with('users')->paginate() ;
+        $response = Post::query()->with('user:id,name,email')->get();
 //        return response()->json($response);
-        return  PostResource::collection($response);
+//        return  PostResource::collection($response);
+        return $response;
     }
 
     /**
@@ -28,12 +29,12 @@ class PostController extends Controller
      */
     public function store(StorePostRequest $request)
     {
-        $response =   DB::transaction(function () use ($request){
+        $response = DB::transaction(function () use ($request) {
             $created = Post::query()->create([
                 'title' => $request->title,
                 'body' => $request->body
             ]);
-            $created->users()->sync([1,2]);
+            $created->users()->sync([1, 2]);
 
         });
 
@@ -45,9 +46,12 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
+
 //        return response()->json($post);
 //        return new JsonResponse(['data' => $post]);
-        return new PostResource($post);
+        return Post::where('slug','like','%'.$post.'%' )->get();
+//        return  DB::where
+//        return new PostResource($post);
     }
 
     /**

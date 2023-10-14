@@ -28,9 +28,12 @@ class DatabaseSeeder extends Seeder
 //            ->create();
 
 
-        User::factory(10)
-            ->has(todo::factory(5), 'todos')
-            ->create();
-//        todo::factory()->create();
+//        User::factory(10)
+//            ->has(todo::factory(5), 'todos')
+//            ->create();
+////        todo::factory()->create();
+///
+        User::factory()->create();
+        Post::factory()->count(5)->create();
     }
 }

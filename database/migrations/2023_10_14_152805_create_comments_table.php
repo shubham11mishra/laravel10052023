@@ -11,13 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('todos', function (Blueprint $table) {
+        Schema::create('comments', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->text('body')->nullable();
-            $table->json('body_json')->nullable();
-            $table->foreignIdFor(\App\Models\User::class,'user_id');
-            $table->foreign('user_id')->on('users')->references('id')->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -27,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('todos');
+        Schema::dropIfExists('comments');
     }
 };
