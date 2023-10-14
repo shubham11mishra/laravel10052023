@@ -6,13 +6,16 @@ use App\Models\todo;
 use App\Http\Requests\StoretodoRequest;
 use App\Http\Requests\UpdatetodoRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class TodoController extends Controller
 {
 
     public function index()
     {
-        $allTodo = todo::paginate();
+        $allTodo = Cache::remember('todo',now()->addSeconds(60),function () {
+           return  todo::paginate();
+        });
         return view('todo.index', ['todos' => $allTodo]);
     }
 

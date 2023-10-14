@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
+
+</head>
+<body>
+    <div x-data="{ message: '' }">
+        <input x-model="message" id="text" type="text">
+        <input x-model="message" id="text2" type="text">
+        <p x-text="message"></p>
+        <p id="jquery"></p>
+      </div>
+      <button id="test">test</button>
+
+      <script>
+        $(document).ready(function () {
+          $('#test').click(function (e) {
+            e.preventDefault();
+            document.getElementById('jquery').innerHTML = document.getElementById('text2').value
+          });
+        });
+      </script>
+
+</body>
+</html>
