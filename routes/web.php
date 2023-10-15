@@ -1,34 +1,23 @@
 <?php
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+Route::get('/play', function () {
+//    return fake()->sentence(2);
+    $randomValues = Collection::times(random_int(3, 5), function () {
+        return random_int(1, 100);
+    });
 
-//Route::get('/', function () {
-//    $title = fake()->sentence();
-//    dump([
-//        'title' => $title,
-//        'meta_title' => $title,
-//        'slug' => Str::slug($title,'-'),
-//        'summery' => fake()->paragraph(3),
-//        'published' => true,
-//        'content' => fake()->paragraph(20),
-//        'published_at' => fake()->dateTimeThisCentury,
-//        'user_id' => 1
-//    ]);
-//    return [1];
-//});
+// Convert the collection to an array
+    $randomValuesArray = $randomValues->all();
 
+// Print the array of random values
+    dump($randomValuesArray);
+});
 
-Route::get('/',[\App\Http\Controllers\PostController::class,'index'])->name('post.index');
-Route::get('/{post}',[\App\Http\Controllers\PostController::class,'show'])->name('post.show');
+Route::get('/', [\App\Http\Controllers\PostController::class, 'index'])
+    ->name('post.index');
+Route::get('/p/{post}', [\App\Http\Controllers\PostController::class, 'show'])
+    ->name('post.show');

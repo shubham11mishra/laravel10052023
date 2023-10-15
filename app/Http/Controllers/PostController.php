@@ -18,10 +18,24 @@ class PostController extends Controller
      */
     public function index()
     {
-        $response = Post::query()->with('user:id,name,email')->get();
-//        return response()->json($response);
-//        return  PostResource::collection($response);
+
+        $response = Post::query()
+            ->where('published','=',true)
+//            ->with(['user:id,name,email',
+//                    'comments:id,parent_id,post_id,user_id,content,published_at',
+//                    'comments.user:id,name,email',
+//                    'comments.replies:id,parent_id,post_id,user_id,content,published_at',
+//                    'comments.replies.user:id,name,email',
+//                    'comments.replies.replies:id,parent_id,post_id,user_id,content,published_at',
+//                    'comments.replies.replies.user:id,name,email',
+//                ]
+//            )
+
+                ->withCount('comments')
+            ->with(['tags:id,title,slug'])
+            ->get();
         return $response;
+//        return view('welcome');
     }
 
     /**
@@ -44,14 +58,27 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Post $post)
+    public function show( $slug)
     {
 
-//        return response()->json($post);
-//        return new JsonResponse(['data' => $post]);
-        return Post::where('slug','like','%'.$post.'%' )->get();
-//        return  DB::where
-//        return new PostResource($post);
+        $response = Post::query()
+            ->where('slug','=',$slug)
+            ->where('published','=',true)
+            ->with(['user:id,name,email',
+                    'comments:id,parent_id,post_id,user_id,content,published_at',
+                    'comments.user:id,name,email',
+                    'comments.replies:id,parent_id,post_id,user_id,content,published_at',
+                    'comments.replies.user:id,name,email',
+                    'comments.replies.replies:id,parent_id,post_id,user_id,content,published_at',
+                    'comments.replies.replies.user:id,name,email',
+                    'tags:id,title,slug'
+                ]
+            )
+            ->withCount('comments')
+            ->get();
+        return $response;
+        return view('welcome');
+
     }
 
     /**

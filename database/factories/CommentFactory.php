@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Comment;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -14,10 +15,13 @@ class CommentFactory extends Factory
      *
      * @return array<string, mixed>
      */
+    protected $model = Comment::class;
     public function definition(): array
     {
         return [
-            //
+            'published' => true,
+            'published_at' => fake()->dateTime,
+            'content' => fake()->paragraph('5'),
         ];
     }
 }

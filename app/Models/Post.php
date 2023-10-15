@@ -21,17 +21,34 @@ class Post extends Model
 //    protected $fillable = ['title','body'];
     protected $guarded = [];
 
+//    public function getRouteKeyName()
+//    {
+//        return 'slug';
+//    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public  function getRouteKeyName()
+    public function comments(): HasMany
     {
-        return 'slug';
+        return $this->hasMany(Comment::class)
+//            ->whereNull('parent_id')
+            ->where('published', '=', 1);
+    }
+
+    public function Tags(): BelongsToMany
+    {
+        return $this->belongsToMany(Tag::class);
     }
 
 
+
+//    public  function getRouteKeyName()
+//    {
+//        return 'slug';
+//    }
 
 
 //    public function comments(): HasMany

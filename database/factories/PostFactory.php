@@ -25,7 +25,7 @@ class PostFactory extends Factory
             'summary' => fake()->paragraph(3),
             'published' => true,
             'content' => fake()->paragraph(20),
-            'published_at' => fake()->dateTimeThisCentury,
+            'published_at' => fake()->dateTime,
             'user_id' => 1
         ];
     }

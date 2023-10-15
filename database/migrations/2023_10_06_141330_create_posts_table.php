@@ -21,7 +21,7 @@ return new class extends Migration
             $table->text('summary');
             $table->boolean('published');
             $table->longText('content');
-            $table->date('published_at');
+            $table->dateTime('published_at');
             $table->timestamps();
         });
     }
