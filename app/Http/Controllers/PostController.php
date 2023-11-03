@@ -32,7 +32,7 @@ class PostController extends Controller
 //            )
 
                 ->withCount('comments')
-            ->with(['tags:id,title,slug'])
+            ->with(['user:id,name,email','tags:id,title,slug'])
             ->get();
         return $response;
 //        return view('welcome');
