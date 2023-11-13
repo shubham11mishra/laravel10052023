@@ -23,6 +23,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'github_id', 'github_token', 'github_refresh_token'
     ];
 
     /**
@@ -46,10 +47,10 @@ class User extends Authenticatable
     ];
 
 
-//    public function posts(): BelongsToMany
-//    {
-//        return $this->belongsToMany(Post::class, 'post_user', 'user_id', 'post_id');
-//    }
+    //    public function posts(): BelongsToMany
+    //    {
+    //        return $this->belongsToMany(Post::class, 'post_user', 'user_id', 'post_id');
+    //    }
 
     public function posts(): HasMany
     {
@@ -60,6 +61,4 @@ class User extends Authenticatable
     {
         return $this->hasMany(Comment::class);
     }
-
-
 }
