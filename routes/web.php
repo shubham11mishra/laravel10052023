@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Services\SomeService;
 use App\Services\SomeServiceFacade;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -64,6 +66,12 @@ Route::get('/play', function () {
 Route::get('/p/{post}', [\App\Http\Controllers\PostController::class, 'show'])
     ->name('post.show');
 
+
+Route::controller(PostController::class)->group(function(){
+    Route::get('/new','create')->name('post.create');
+});
+
+
 Route::get('/test', function () {
     $users = DB::table('users')->select('email', 'name')->get();
     $post = DB::table('posts')->paginate();
@@ -85,13 +93,22 @@ Route::get('/test', function () {
 
 
 Route::get('/image', function () {
+    dump(asset('storage/bvK5oiyxD7YAlczfysXf6YkUqOkk43937faBRCqf.jpg'));
+    dump(public_path());
+    dump(storage_path('app/bvK5oiyxD7YAlczfysXf6YkUqOkk43937faBRCqf.jpg'));
     return view('image');
 })->name('image.view');
 
 Route::post('/image/upload', function (Request $request) {
-    $file = $request->file('image');
-    dump($file);
-    dump($request);
+    if ($request->hasFile('image')) {
+        $file = $request->file('image');
+        $a =  Storage::disk('local')->put('/', $file);
+        dump($a);
+    }
+
+    return view('image', compact('a'));
 })->name('image.upload');
 
 require __DIR__ . '/auth.php';
+
+

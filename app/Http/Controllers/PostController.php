@@ -20,24 +20,29 @@ class PostController extends Controller
     {
 
         $response = Post::query()
-            ->where('published','=',true)
-//            ->with(['user:id,name,email',
-//                    'comments:id,parent_id,post_id,user_id,content,published_at',
-//                    'comments.user:id,name,email',
-//                    'comments.replies:id,parent_id,post_id,user_id,content,published_at',
-//                    'comments.replies.user:id,name,email',
-//                    'comments.replies.replies:id,parent_id,post_id,user_id,content,published_at',
-//                    'comments.replies.replies.user:id,name,email',
-//                ]
-//            )
+            ->where('published', '=', true)
+            //            ->with(['user:id,name,email',
+            //                    'comments:id,parent_id,post_id,user_id,content,published_at',
+            //                    'comments.user:id,name,email',
+            //                    'comments.replies:id,parent_id,post_id,user_id,content,published_at',
+            //                    'comments.replies.user:id,name,email',
+            //                    'comments.replies.replies:id,parent_id,post_id,user_id,content,published_at',
+            //                    'comments.replies.replies.user:id,name,email',
+            //                ]
+            //            )
 
-                ->withCount('comments')
-            ->with(['user:id,name,email','tags:id,title,slug'])
+            ->withCount('comments')
+            ->with(['user:id,name,email', 'tags:id,title,slug'])
             ->get();
         return $response;
-//        return view('welcome');
+        //        return view('welcome');
     }
 
+    function create()
+    {
+
+        return view('post.create');
+    }
     /**
      * Store a newly created resource in storage.
      */
@@ -49,7 +54,6 @@ class PostController extends Controller
                 'body' => $request->body
             ]);
             $created->users()->sync([1, 2]);
-
         });
 
         return new JsonResponse($response);
@@ -58,13 +62,15 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show( $slug)
+    public function show($slug)
     {
 
         $response = Post::query()
-            ->where('slug','=',$slug)
-            ->where('published','=',true)
-            ->with(['user:id,name,email',
+            ->where('slug', '=', $slug)
+            ->where('published', '=', true)
+            ->with(
+                [
+                    'user:id,name,email',
                     'comments:id,parent_id,post_id,user_id,content,published_at',
                     'comments.user:id,name,email',
                     'comments.replies:id,parent_id,post_id,user_id,content,published_at',
@@ -78,7 +84,6 @@ class PostController extends Controller
             ->get();
         return $response;
         return view('welcome');
-
     }
 
     /**
