@@ -2,8 +2,11 @@
 
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Middleware\ifuseristen;
 use App\Services\SomeService;
 use App\Services\SomeServiceFacade;
+use Faker\Guesser\Name;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
@@ -31,7 +34,7 @@ Route::get('/', function () {
     //    dump(config('services'));
     //    dd(\Illuminate\Support\Facades\Config::get('services'));
     return view('theme');
-});
+})->middleware(['auth', 'abc']);
 
 
 Route::get('/dashboard', function () {
@@ -67,8 +70,8 @@ Route::get('/p/{post}', [\App\Http\Controllers\PostController::class, 'show'])
     ->name('post.show');
 
 
-Route::controller(PostController::class)->group(function(){
-    Route::get('/new','create')->name('post.create');
+Route::controller(PostController::class)->group(function () {
+    Route::get('/new', 'create')->name('post.create');
 });
 
 
@@ -109,6 +112,8 @@ Route::post('/image/upload', function (Request $request) {
     return view('image', compact('a'));
 })->name('image.upload');
 
+
+Route::post('/tag', function (Request $request) {
+    return  response()->json($request->toArray());
+})->name('tag.search');
 require __DIR__ . '/auth.php';
-
-

@@ -17,6 +17,7 @@ use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 
 Route::middleware('guest')->group(function () {
     Route::get('/enter', [RegisterController::class, 'index'])->name('enter');
+
     Route::get('/auth/github/redirect', function () {
         return Socialite::driver('github')->redirect();
     })->name('enter.github');
