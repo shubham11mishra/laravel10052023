@@ -28,13 +28,13 @@ Route::get('/', function () {
     //    $someServices->someMethod();
     // \App\Services\SomeServiceFacade::someMethod();
     // SomeService::someMethod();
-    SomeServiceFacade::someMethod();
+    // SomeServiceFacade::someMethod();
     //    SomeService::someMethod();
     //    dump(phpinfo());
     //    dump(config('services'));
     //    dd(\Illuminate\Support\Facades\Config::get('services'));
-    return view('theme');
-})->middleware(['auth', 'abc']);
+    return view('welcome');
+});
 
 
 Route::get('/dashboard', function () {
