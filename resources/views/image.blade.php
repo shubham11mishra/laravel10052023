@@ -14,7 +14,7 @@
     <form class="form-select" action="{{Route('image.upload')}}" method="post"  enctype="multipart/form-data">
         @csrf
         <input type="file" name="image" multiple >
-        <button type="submit">Upload</button>
+        <button type="submit">Uploaded</button>
     </form>
     <img src="{{asset('storage/bvK5oiyxD7YAlczfysXf6YkUqOkk43937faBRCqf.jpg')}}" alt="" srcset="">
 
