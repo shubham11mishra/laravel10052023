@@ -79,7 +79,7 @@
         <script type="text/javascript">
             let markdowneditor = () => {
                 return {
-                    markdown: Alpine.$persist(0),
+                    markdown: Alpine.$persist(''),
                     tagSearch: null,
                     showTagBox : false,
                     init: function() {
