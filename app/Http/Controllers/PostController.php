@@ -34,8 +34,8 @@ class PostController extends Controller
             ->withCount('comments')
             ->with(['user:id,name,email', 'tags:id,title,slug'])
             ->get();
-        return $response;
-        //        return view('welcome');
+
+        return view('home', compact('response'));
     }
 
     function create()
