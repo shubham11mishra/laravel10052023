@@ -25,7 +25,7 @@
             </template>
         </div>
         <div x-data='cart' class="basis-1/2">
-            <h3>cart</h3>
+            <h3>cartsssssss</h3>
 
         </div>
     </div>

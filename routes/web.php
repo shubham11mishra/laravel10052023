@@ -25,6 +25,13 @@ use Illuminate\Support\Facades\Storage;
 
 
 
+Route::get('/', [\App\Http\Controllers\PostController::class, 'index'])
+    ->name('post.index');
+
+
+
+
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -35,10 +42,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/', [\App\Http\Controllers\PostController::class, 'index'])
-    ->name('post.index');
-Route::get('/', [\App\Http\Controllers\PostController::class, 'index'])
-    ->name('products.relevant');
+
 
 Route::get('/p/{post}', [\App\Http\Controllers\PostController::class, 'show'])
     ->name('post.show');
