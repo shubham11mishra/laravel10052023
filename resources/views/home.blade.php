@@ -85,6 +85,8 @@
                     </a>
                 </ul>
             </nav>
+
+            @if(count($response) > 0)
             @foreach ($response as $item)
 
             <article class="mb-5 bg-slate-100 shadow-md">
@@ -110,7 +112,7 @@
                     </div>
                 </div>
                 <h2 class="mt-5 pl-5 text-xl font-bold text-gray-900">
-                    <a href="#">{{ $item->title }}</a>
+                    <a href="{{route('post.show',$item->slug)}}">{{ $item->title }}</a>
                 </h2>
                 <div class="my-5 flex flex-wrap">
                     @foreach ($item->tags as $tags)
@@ -156,6 +158,14 @@
             @endforeach
 
             {{ $response->links() }}
+            @else
+            <div class="bg-white p-5 text-center">
+                <h3 class="font-bold pb-5 text-2xl">No post found</h3>
+                <p class="">
+                    <a class="hover:text-red-600 hover:underline cursor-pointer" href="{{route('post.index')}}">Go to home page</a>
+                </p>
+            </div>
+            @endif
         </div>
         <div class="m-5 hidden lg:block">
             <div class="rounded-md bg-white p-5 shadow-md">

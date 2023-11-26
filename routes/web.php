@@ -27,7 +27,8 @@ use Illuminate\Support\Facades\Storage;
 
 Route::get('/', [\App\Http\Controllers\PostController::class, 'index'])
     ->name('post.index');
-
+Route::get('/p/{post}', [\App\Http\Controllers\PostController::class, 'show'])
+    ->name('post.show');
 
 
 
@@ -44,8 +45,7 @@ Route::middleware('auth')->group(function () {
 
 
 
-Route::get('/p/{post}', [\App\Http\Controllers\PostController::class, 'show'])
-    ->name('post.show');
+
 Route::controller(PostController::class)->group(function () {
     Route::get('/new', 'create')->name('post.create');
 });
