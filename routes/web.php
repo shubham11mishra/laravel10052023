@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ImageController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\ifuseristen;
@@ -88,5 +89,13 @@ Route::get('/play', function () {
     // Print the array of random values
     dump($randomValuesArray);
 });
+
+
+
+
+/* ---------    Image uploading ............*/
+
+Route::get('/upload', [ImageController::class, 'showForm']);
+Route::post('/upload', [ImageController::class, 'upload'])->name('upload.image');
 
 require __DIR__ . '/auth.php';
