@@ -1,4 +1,4 @@
-@section('content')
+
     @if ($errors->any() || session('success'))
         <div class="mb-4">
             @if ($errors->any())
@@ -19,4 +19,3 @@
             @endif
         </div>
     @endif
-@endsection
