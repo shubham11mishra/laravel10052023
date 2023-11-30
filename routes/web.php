@@ -3,12 +3,14 @@
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TagController;
 use App\Http\Middleware\ifuseristen;
 use App\Services\SomeService;
 use App\Services\SomeServiceFacade;
 use Faker\Guesser\Name;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
@@ -31,8 +33,11 @@ Route::get('/', [\App\Http\Controllers\PostController::class, 'index'])
 Route::get('/p/{post}', [\App\Http\Controllers\PostController::class, 'show'])
     ->name('post.show');
 
+Route::post('/tag', [TagController::class, 'search'])->name('tag.search');
 
-
+// function (Request $request) {
+//     return  response()->json($request->toArray());
+// }
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -73,21 +78,20 @@ Route::post('/image/upload', function (Request $request) {
 })->name('image.upload');
 
 
-Route::post('/tag', function (Request $request) {
-    return  response()->json($request->toArray());
-})->name('tag.search');
+
 
 Route::get('/play', function () {
-    //    return fake()->sentence(2);
-    $randomValues = Collection::times(random_int(3, 5), function () {
-        return random_int(1, 100);
-    });
+    $titles = 
+    DB::table('users')
+    ->select(DB::raw('count(*) as user_count, status'))
+    ->where('status', '<>', 1)
+    ->groupBy('status')
+    ->get();
 
-    // Convert the collection to an array
-    $randomValuesArray = $randomValues->all();
 
-    // Print the array of random values
-    dump($randomValuesArray);
+    dump($titles);
+    
+    // dd($result);
 });
 
 

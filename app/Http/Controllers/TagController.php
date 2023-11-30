@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Tag;
 use App\Http\Requests\StoreTagRequest;
 use App\Http\Requests\UpdateTagRequest;
+use Illuminate\Http\Request;
 
 class TagController extends Controller
 {
@@ -15,7 +16,11 @@ class TagController extends Controller
     {
         //
     }
-
+    function search(Request $request) {
+        // dd($request->tagSearch);
+        $searchResult =Tag::where('title','like',"%$request->tagSearch%")->limit(5)->get();
+        return response()->json($searchResult);
+    }
     /**
      * Show the form for creating a new resource.
      */
