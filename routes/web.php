@@ -47,14 +47,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::controller(PostController::class)->group(function () {
+        Route::get('/new', 'create')->name('post.create');
+        Route::post('/new', 'store')->name('post.store');
+    });
 });
 
 
 
 
-Route::controller(PostController::class)->group(function () {
-    Route::get('/new', 'create')->name('post.create');
-});
+
 
 
 

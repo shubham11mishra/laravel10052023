@@ -56,8 +56,7 @@ class PostController extends Controller
                 $query = $query->orderBy('comments_count', 'desc');
             }
         }
-        if($tag){
-
+        if ($tag) {
         }
         $response = $query->paginate()->withQueryString();
 
@@ -74,15 +73,7 @@ class PostController extends Controller
      */
     public function store(StorePostRequest $request)
     {
-        $response = DB::transaction(function () use ($request) {
-            $created = Post::query()->create([
-                'title' => $request->title,
-                'body' => $request->body
-            ]);
-            $created->users()->sync([1, 2]);
-        });
-
-        return new JsonResponse($response);
+        Post::create($request->all());
     }
 
     /**

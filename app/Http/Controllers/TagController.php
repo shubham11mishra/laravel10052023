@@ -18,7 +18,7 @@ class TagController extends Controller
     }
     function search(Request $request) {
         // dd($request->tagSearch);
-        $searchResult =Tag::where('title','like',"%$request->tagSearch%")->limit(5)->get();
+        $searchResult =Tag::select('title','slug','id')->where('title','like',"%$request->tagSearch%")->limit(5)->get();
         return response()->json($searchResult);
     }
     /**

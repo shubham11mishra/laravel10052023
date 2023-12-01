@@ -9,10 +9,10 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <form x-data="markdowneditor()" action="" method="post" class="">
+                    <form x-data="markdowneditor()" @submit.prevent="submit" action="" method="post" class="">
                         @csrf
 
-                        <textarea name="title" placeholder="New post title here..." class=" block border-0 max-w-full w-full mb-5  focus:border-transparent focus:ring-0 placeholder-gray-500 placeholder:text-5xl placeholder:font-extrabold  text-4xl  font-extrabold "></textarea>
+                        <textarea x-model='title' name="title" placeholder="New post title here..." class=" block border-0 max-w-full w-full mb-5  focus:border-transparent focus:ring-0 placeholder-gray-500 placeholder:text-5xl placeholder:font-extrabold  text-4xl  font-extrabold "></textarea>
 
                         <div x-data="pills()" class="relative">
                             <div role="combobox" class=" border-none p-0 flex items-center mb-5 mx-5  cursor-text">
@@ -35,8 +35,8 @@
                                             <div class="mx-auto">
                                                 <input x-model="tagSearch" @input.debounce.500ms="fetchTags" @keydown.enter.prevent="addNewTag" id="tag-input" autocomplete="off" type="text" placeholder="Add another..." class="border-0 block  w-full focus:ring-0">
                                                 <ul class="absolute w-full mt-1 shadow-md ">
-                                                    <template x-for="(tag_search_result,index) in tag_search_results" :key="tag_search_result.id">
-                                                        <li class="bg-red-100 border-collapse border py-1 px-2  cursor-pointer" @click="addPillToeditor">
+                                                    <template x-for="(tag_search_result,index) in tag_search_results" :key="index">
+                                                        <li class="bg-red-100 border-collapse border py-1 px-2  cursor-pointer" @click="addPillToEditor">
                                                             <h1 x-text="tag_search_result.title"></h1>
                                                         </li>
 
@@ -49,13 +49,11 @@
 
 
                                 </ul>
-                                <!-- <div x-show="showTagBox" @click.outside.stop="showTagBox = false" class="block">
-                                    asd
-                                </div> -->
+
                             </div>
                         </div>
                         <textarea x-model="markdown" name="body" id="body-textarea" cols="30" rows="10" class="block  max-w-full w-full"></textarea>
-                        <span x-text="markdown">
+                        <button type="submit">Publish Post</button>
                     </form>
                 </div>
             </div>
@@ -67,17 +65,25 @@
                 Alpine.store('data', {
                     markdown: Alpine.$persist({
                         content: '123',
-                        pills: []
+                        pills: [],
+                        title: ''
                     })
                 })
-
             })
+
             let markdowneditor = () => {
                 return {
                     tagSearch: null,
                     showTagBox: false,
                     tag_search_results: [],
+                    get title() {
+                        return Alpine.store('data').markdown.title;
 
+                    },
+                    set title(value) {
+                        Alpine.store('data').markdown.title = value;
+
+                    },
                     get markdown() {
                         return Alpine.store('data').markdown.content;
                     },
@@ -88,7 +94,51 @@
                         count: 1
                     }),
                     fetchTags: async function() {
-                        const result = await fetch('<?= route('tag.search') ?>', {
+                        const result = await this.fetchTagSearchResults();
+                        this.tag_search_results = result;
+                    },
+                    addNewTag: function() {
+                        if (this.checkIfTagExist()) {
+                            this.$dispatch('add-pill', {
+                                title: this.tagSearch
+                            });
+                        } else {
+                            this.createNewTag();
+                        }
+                    },
+                    checkIfTagExist: function() {
+                        // Implement the logic to check if the tag exists
+                        return false;
+                    },
+                    createNewTag: function() {
+                        // Implement the logic to create a new tag
+                    },
+                    addPillToEditor: function() {
+                        this.$dispatch('add-pill', this.tag_search_result);
+                        this.tag_search_results = [];
+                        this.tagSearch = '';
+                    },
+                    fetchTagSearchResults: async function() {
+                        try {
+                            const response = await fetch('<?= route('tag.search') ?>', {
+                                method: 'POST',
+                                headers: {
+                                    'Accept': 'application/json',
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content
+                                },
+                                body: JSON.stringify({
+                                    tagSearch: this.tagSearch
+                                })
+                            });
+                            return await response.json();
+                        } catch (error) {
+                            console.error('Error fetching tag search results:', error);
+                            return [];
+                        }
+                    },
+                    submit: function() {
+                        fetch('<?= route('post.store') ?>', {
                             method: 'POST',
                             headers: {
                                 'Accept': 'application/json',
@@ -96,34 +146,13 @@
                                 'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content
                             },
                             body: JSON.stringify({
-                                tagSearch: this.tagSearch
+                                ...Alpine.store('data').markdown
                             })
-                        }).then(data => data.json())
-                        this.tag_search_results = result;
-                    },
-                    addNewTag: function(e) {
-                        if (this.checkIfTagExist()) {
-                            $dispatch('add-pill', {
-                                title: this.tagSearch
-                            })
-
-                        } else {
-                            this.addNewTag()
-                        }
-                    },
-                    checkIfTagExist: function() {
-
-                    },
-                    addNewTag: function() {
-
-                    },
-                    addPillToeditor: function() {
-                        this.$dispatch('add-pill', this.tag_search_result);
-                        this.tag_search_results = [];
-                        this.tagSearch = ''
+                        })
                     }
-                }
-            }
+                };
+            };
+
             const pills = function() {
                 return {
                     get pills() {
@@ -131,9 +160,8 @@
                     },
                     newPill: {},
                     addPill: function() {
-                        Alpine.store('data').markdown.pills = [...Alpine.store('data').markdown.pills, this.newPill]
+                        Alpine.store('data').markdown.pills = [...this.pills, this.newPill];
                     },
-
                     removePill: function(index) {
                         Alpine.store('data').markdown.pills.splice(index, 1);
                     }
@@ -143,11 +171,11 @@
             document.addEventListener('add-pill', (e) => {
                 const pill = {
                     ...e.detail
-                }
-                const myPills = pills()
-                myPills.newPill = pill
-                myPills.addPill()
-            })
+                };
+                const myPills = pills();
+                myPills.newPill = pill;
+                myPills.addPill();
+            });
         </script>
     </x-slot>
 </x-app-layout>

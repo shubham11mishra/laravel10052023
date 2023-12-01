@@ -21,7 +21,7 @@ class Post extends Model
     // protected $append = [];
 
 
-    //    protected $fillable = ['title','body'];
+    protected $fillable = ['title', 'body','user_id','meta_title','slug','summary','published','content','published_at'];
     protected $guarded = [];
 
     //    public function getRouteKeyName()
