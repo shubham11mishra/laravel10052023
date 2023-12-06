@@ -10,11 +10,24 @@
 
  @include('images.message')
 
-<form action="{{ route('upload.image') }}" method="post" enctype="multipart/form-data">
-    @csrf
-    <input type="file" name="image" accept="image/*">
-    <button type="submit">Upload Image</button>
-</form>
+ <div class="flex justify-center items-center px-4 py-6">
+    <div class="bg-white w-full max-w-md rounded-md shadow-md p-4">
+        <h1 class="text-3xl font-bold text-gray-800 text-center mb-4">Upload Image</h1>
+
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            @csrf
+
+            <div class="mb-4">
+                <label for="image" class="block text-gray-700 text-sm font-bold mb-2">Select Image</label>
+                <input type="file" id="image" name="image" class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded-md focus:outline-none focus:shadow-outline-primary">
+            </div>
+
+            <button type="submit" class="btn btn-primary px-4 py-2 bg-blue-500 text-white">Upload Image</button>
+        </form>
+    </div>
+</div>
+
+
 </body>
 </html>
 

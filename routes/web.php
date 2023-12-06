@@ -100,8 +100,30 @@ Route::get('/play', function () {
 
 
 /* ---------    Image uploading ............*/
-
-Route::get('/upload', [ImageController::class, 'showForm']);
+Route::get('/index', [ImageController::class, 'index'])->name('images.index');
+Route::get('/images/create', [ImageController::class, 'showForm'])->name('images.create');
 Route::post('/upload', [ImageController::class, 'upload'])->name('upload.image');
+
+Route::get('/images/{image}', [ImageController::class, 'show'])->name('images.show');
+
+Route::get('/images/{image}/edit', [ImageController::class, 'edit'])->name('images.edit');
+Route::put('/images/{image}', [ImageController::class, 'update'])->name('images.update');
+Route::delete('/images/{image}', [ImageController::class, 'destroy'])->name('images.destroy');
+
+
+/* ---------    Image uploading through ajax and javascript ............*/
+Route::get('/ajaxindex', [ImageController::class, 'ajaxindex'])->name('images.ajaxindex');
+
+Route::get('/getall', [ImageController::class, 'getall'])->name('images.getall');
+
+Route::get('/upload-view', [ImageController::class, 'upload_view'])->name('ajaximages.upload-view');
+
+Route::post('/upload-save', [ImageController::class, 'upload_save'])->name('ajaximages.upload-save');
+
+Route::get('/edit-image/{id}', [ImagesController::class, 'ajaxedit'])->name('edit-image');
+Route::post('/update-image/{id}', [ImagesController::class, 'ajaxupdate'])->name('update-image');
+Route::delete('/delete-image/{id}', [ImagesController::class, 'ajaxdestroy'])->name('delete-image');
+
+
 
 require __DIR__ . '/auth.php';
