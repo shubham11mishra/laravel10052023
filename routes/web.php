@@ -152,3 +152,6 @@ Route::group(['prefix' => 's', 'as' => 's.',], function () {
 });
 
 require __DIR__ . '/auth.php';
+
+
+require __DIR__ . '/bharathi.php';
