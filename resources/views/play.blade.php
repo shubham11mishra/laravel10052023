@@ -6,11 +6,13 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
 </head>
 <body>
-    <x-mycomponent.alert type="error" message="this is error" > Failed</x-mycomponent.alert>
+       <x-btn name="a" type="asd">my btn</x-btn>
+     
 
-    <x-mycomponent.alert type="success"  message="this is success" > success</x-mycomponent.alert>
+       <h1></h1>
+       <a href="http://" target="_blank" rel="noopener noreferrer">link</a>
+       <button type="submit">asd</button>
 </body>
 </html>
