@@ -82,18 +82,12 @@ Route::post('/image/upload', function (Request $request) {
 
 
 
-Route::get('/play', function () {
-    $titles = 
-    DB::table('users')
-    ->select(DB::raw('count(*) as user_count, status'))
-    ->where('status', '<>', 1)
-    ->groupBy('status')
-    ->get();
-
-
-    dump($titles);
-    
-    // dd($result);
+Route::get('/play', function (Request $request) {
+    // $request->session()->flash('success', 'Task was successful!');
+    session()->flash('success', 'Task was successful!');
+    // dd($request->session());
+    return view('play');
+   
 });
 
 
