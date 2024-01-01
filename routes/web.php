@@ -1,15 +1,19 @@
 <?php
 
+use App\Http\Controllers\IdeasController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SLoginController;
 use App\Http\Controllers\TagController;
 use App\Http\Middleware\ifuseristen;
+use App\Http\Middleware\SAuth;
 use App\Services\SomeService;
 use App\Services\SomeServiceFacade;
 use Faker\Guesser\Name;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
@@ -83,16 +87,12 @@ Route::post('/image/upload', function (Request $request) {
 
 
 Route::get('/play', function () {
-    $titles = 
-    DB::table('users')
-    ->select(DB::raw('count(*) as user_count, status'))
-    ->where('status', '<>', 1)
-    ->groupBy('status')
-    ->get();
+
+    return view('play');
 
 
-    dump($titles);
-    
+    // dump($titles);
+
     // dd($result);
 });
 
@@ -100,15 +100,18 @@ Route::get('/play', function () {
 
 
 /* ---------    Image uploading ............*/
-Route::get('/index', [ImageController::class, 'index'])->name('images.index');
-Route::get('/images/create', [ImageController::class, 'showForm'])->name('images.create');
-Route::post('/upload', [ImageController::class, 'upload'])->name('upload.image');
+Route::controller(ImageController::class)->group(function () {
+    Route::group(['as' => 'images.'], function () {
+        Route::get('/index', 'index')->name('index');
+        Route::get('/images/create',  'showForm')->name('create');
+        Route::get('/images/{image}', 'show')->name('show');
+        Route::get('/images/{image}/edit', 'edit')->name('edit');
+        Route::put('/images/{image}', 'update')->name('update');
+        Route::delete('/images/{image}', 'destroy')->name('destroy');
+    });
+    Route::post('/upload', 'upload')->name('upload.image');
+});
 
-Route::get('/images/{image}', [ImageController::class, 'show'])->name('images.show');
-
-Route::get('/images/{image}/edit', [ImageController::class, 'edit'])->name('images.edit');
-Route::put('/images/{image}', [ImageController::class, 'update'])->name('images.update');
-Route::delete('/images/{image}', [ImageController::class, 'destroy'])->name('images.destroy');
 
 
 /* ---------    Image uploading through ajax and javascript ............*/
@@ -120,10 +123,32 @@ Route::get('/upload-view', [ImageController::class, 'upload_view'])->name('ajaxi
 
 Route::post('/upload-save', [ImageController::class, 'upload_save'])->name('ajaximages.upload-save');
 
-Route::get('/edit-image/{id}', [ImagesController::class, 'ajaxedit'])->name('edit-image');
-Route::post('/update-image/{id}', [ImagesController::class, 'ajaxupdate'])->name('update-image');
-Route::delete('/delete-image/{id}', [ImagesController::class, 'ajaxdestroy'])->name('delete-image');
+// Route::get('/edit-image/{id}', [ImagesController::class, 'ajaxedit'])->name('edit-image');
+// Route::post('/update-image/{id}', [ImagesController::class, 'ajaxupdate'])->name('update-image');
+// Route::delete('/delete-image/{id}', [ImagesController::class, 'ajaxdestroy'])->name('delete-image');
+
+// Route::get('')
+
+// login  register and logout 
 
 
+
+
+Route::group(['prefix' => 's', 'as' => 's.',], function () {
+
+    Route::middleware(['guest'])->group(function () {
+        Route::get('/login', [SLoginController::class, 'index'])->name('login');
+        Route::post('/login', [SLoginController::class, 'login'])->name('loginrequest');
+        Route::get('/register', [SLoginController::class, 'register'])->name('register');
+        Route::post('/register', [SLoginController::class, 'registerrequest'])->name('registerrequest');
+    });
+
+
+    Route::middleware([SAuth::class])->group(function () {
+        Route::get('/', [IdeasController::class, 'index'])->name('home');
+        Route::post('/ideas/store', [IdeasController::class, 'store'])->name('ideas.store');
+        Route::get('/logout', [SLoginController::class, 'logout'])->name('logout');
+    });
+});
 
 require __DIR__ . '/auth.php';
