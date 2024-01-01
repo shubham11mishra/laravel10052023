@@ -91,7 +91,7 @@
                 <div class="grid grid-cols-2 gap-4 mt-4 text-center">
                     @foreach ($images as $image)
                         <div class="bg-white p-4 rounded-md shadow">
-                            <img src="{{ asset($image->path) }}" alt="" width="100" height="100">
+                            <img src="{{ asset('storage/'.$image->path) }}" alt="" width="100" height="100">
                             <div class="mt-4">
                                 <h2 class="text-gray-800">{{ $image->name }}</h2>
                                 <a href="{{ route('images.edit', $image->id) }}" class="btn btn-secondary mr-2">Edit</a>

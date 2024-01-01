@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Image;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ImageController extends Controller
 {
@@ -21,21 +22,20 @@ class ImageController extends Controller
         return view('images/upload');
     }
 
-    public function upload(Request $request)
+    public function upload(Request $request, Image $image)
     {
         $request->validate([
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
 
-        $imageName = time() . '.' . $request->image->extension();
-        $request->image->move(public_path('images'), $imageName);
+        $imageName = $request->file('image');
 
-       
-        $image = new Image();
-        $image->name = $imageName;
-        $image->path = '/images/' . $imageName;
-        $image->save();
+        $images =  Storage::disk('public')->put('/images', $imageName);
+        $image->create([
+            'name' =>$images,
+            'path' => $images
+        ]);
 
         return redirect('/index')->with('success', 'Image uploaded successfully.');
     }
@@ -54,35 +54,23 @@ class ImageController extends Controller
     public function update(Request $request, $id)
     {
         $image = Image::find($id);
-
-        // var_dump($request->hasFile('newImage'));
-        if (!$image) {
-            return back()->withErrors('Image not found');
-        }
-
+        
+        
         $request->validate([
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'newImage' => 'required|nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         if ($request->hasFile('newImage')) {
-
-            // Delete the existing image file if it exists
-            if ($image->filename) {
-                Storage::delete('images/' . $image->filename);
-            }
-
-            // Generate a new unique filename for the updated image
-            $imageName = time() . '.' . $request->newImage->extension();
-            $request->file('newImage')->move(public_path('images'), $imageName);
-
-
-            // Update the image record with the new filename and path
-            $image->name = $imageName;
-            $image->path = '/images/' . $imageName;
+            $imageName = $request->file('newImage');
+            $images =  Storage::disk('public')->put('/images', $imageName);
+            $a = new Image();
+            $a->create([
+                'name' => $images,
+                'path' =>$images
+            ]);
         }
-
-        $image->save();
-
+        
+       
 
         return redirect('/index')->with('success', 'Image updated successfully.');
     }
@@ -90,8 +78,11 @@ class ImageController extends Controller
     public function destroy(Request $request, Image $image)
     {
         // Delete the image file from storage
-        if ($image->filename) {
-            Storage::delete('images/' . $image->filename);
+        if ($image->path) {
+            // Storage::delete('/' . $image->filename);
+            Storage::disk('public')->delete($image->path);
+
+
         }
 
         // Delete the image record from the database
@@ -128,12 +119,15 @@ class ImageController extends Controller
             ]);
 
             $imageName = time() . '.' . $request->image->extension();
-            $request->image->move(public_path('images'), $imageName);
+            // $file = $request->file('image');
 
-            $image = new Image();
-            $image->name = $imageName;
-            $image->path = '/images/' . $imageName;
-            $image->save();
+            // $request->image->move(public_path('images'), $imageName);
+            $a =  Storage::disk('public')->put('/images', $imageName);
+            dd($a);
+            // $image = new Image();
+            // $image->name = $imageName;
+            // $image->path = '/images/' . $imageName;
+            // $image->save();
             return response()->json(['message' => 'Image uploaded successfully'], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Failed to upload image'], 500);

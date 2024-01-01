@@ -21,7 +21,7 @@
                 @method('PUT')
 
                 <div class="image-container">
-                    <img id="previewImage" src="{{ asset($image->path) }}" alt="Image Preview">
+                    <img id="previewImage" src="{{ asset('storage/'.$image->path) }}" alt="Image Preview">
                   
                     <label for="newImage">Select New Image:</label>
                     <input type="file" id="newImage" name="newImage">
