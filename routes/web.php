@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CheatSheet\CheatSheetController;
 use App\Http\Controllers\IdeasController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\PostController;
@@ -30,14 +31,14 @@ use Illuminate\Support\Facades\Storage;
 */
 
 
+Route::get('/', [CheatSheetController::class ,'index']);
 
+// Route::get('/', [\App\Http\Controllers\PostController::class, 'index'])
+//     ->name('post.index');
+// Route::get('/p/{post}', [\App\Http\Controllers\PostController::class, 'show'])
+//     ->name('post.show');
 
-Route::get('/', [\App\Http\Controllers\PostController::class, 'index'])
-    ->name('post.index');
-Route::get('/p/{post}', [\App\Http\Controllers\PostController::class, 'show'])
-    ->name('post.show');
-
-Route::post('/tag', [TagController::class, 'search'])->name('tag.search');
+// Route::post('/tag', [TagController::class, 'search'])->name('tag.search');
 
 // function (Request $request) {
 //     return  response()->json($request->toArray());
