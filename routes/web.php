@@ -135,7 +135,7 @@ Route::post('/upload-save', [ImageController::class, 'upload_save'])->name('ajax
 
 
 
-Route::group(['prefix' => 's', 'as' => 's.',], function () {
+Route::group(['prefix' => 's', 'as' => 's.'], function () {
 
     Route::middleware(['guest'])->group(function () {
         Route::get('/login', [SLoginController::class, 'index'])->name('login');
@@ -156,3 +156,4 @@ require __DIR__ . '/auth.php';
 
 
 require __DIR__ . '/bharathi.php';
+require __DIR__ . '/shubham.php';

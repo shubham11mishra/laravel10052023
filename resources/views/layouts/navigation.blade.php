@@ -15,8 +15,8 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('post.create')" :active="request()->routeIs('post.create')">
-                        {{ __('Create Post') }}
+                    <x-nav-link :href="route('api.index')" :active="request()->routeIs('post.create')">
+                        {{ __('API Keys') }}
                     </x-nav-link>
                 </div>
             </div>

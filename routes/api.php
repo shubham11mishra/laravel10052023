@@ -1,7 +1,11 @@
 <?php
 
+use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TodolistController;
+use App\Models\Article;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,14 +19,54 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/post',[\App\Http\Controllers\PostController::class,'index'])->name('post.index');
-Route::get('/post/{post}', [\App\Http\Controllers\PostController::class,'show'])->name('post.show');
-Route::post('/post', [\App\Http\Controllers\PostController::class,'store'])->name('post.store');
-//Route::post();
-//Route::patch();
-//Route::delete();
 
-//Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//    return $request->user();
-//});
 
+Route::get('/', function () {
+    return response()->json(Auth::guard('api')->check());
+});
+
+// Route::get('/articles',function(){
+//     return Article::all();
+// });
+
+// Route::get('/articles/{id}',function($id){
+//     try {
+//         return   Article::findorfail($id);
+//     } catch (Exception $e) {
+//         return response()->json([
+//             'message' => $e->getMessage()
+//         ], 404);
+//     }
+
+// });
+
+// Route::post('/articles',function(Request $request){
+//     return Article::create($request->all());
+// });
+
+// Route::put('/articles/{id}',function(Request $request,$id){
+//     $article = Article::find($id);
+//     $article->update($request->all());
+//     return $article;
+// });
+
+// Route::delete('/articles/{id}',function($id){
+//     $article = Article::find($id);
+//     $article->delete();
+//     return 204 ;
+// });
+
+Route::group(['prefix' => 'auth'], function () {
+    Route::post('login', [AuthController::class, 'login']);
+    Route::post('register', [AuthController::class, 'register']);
+
+    Route::group(['middleware' => 'auth:sanctum'], function () {
+        Route::get('logout', [AuthController::class, 'logout']);
+        Route::get('user', [AuthController::class, 'user']);
+    });
+});
+Route::get('/articles', [ArticleController::class, 'index']);
+Route::get('/articles/{id}', [ArticleController::class, 'show']);
+Route::post('/articles', [ArticleController::class, 'store']);
+Route::put('/articles/{id}', [ArticleController::class, 'update']);
+Route::delete('/articles/{id}', [ArticleController::class, 'destroy']);
