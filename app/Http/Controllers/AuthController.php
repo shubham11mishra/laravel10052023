@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+    use HttpResponses;
+    
     public function register(Request $request)
     {
         $request->validate([
@@ -35,7 +38,7 @@ class AuthController extends Controller
             return response()->json(['error' => 'Provide proper details']);
         }
     }
-    
+
     public function login(Request $request)
     {
         $request->validate([

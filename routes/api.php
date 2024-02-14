@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TodolistController;
 use App\Models\Article;
 use Illuminate\Http\Request;
@@ -57,16 +58,30 @@ Route::get('/', function () {
 // });
 
 Route::group(['prefix' => 'auth'], function () {
+
     Route::post('login', [AuthController::class, 'login']);
     Route::post('register', [AuthController::class, 'register']);
 
     Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::get('logout', [AuthController::class, 'logout']);
-        Route::get('user', [AuthController::class, 'user']);
+        Route::get('user', [AuthController::class, 'user'])->name('api.user.detail');
     });
 });
-Route::get('/articles', [ArticleController::class, 'index']);
-Route::get('/articles/{id}', [ArticleController::class, 'show']);
-Route::post('/articles', [ArticleController::class, 'store']);
-Route::put('/articles/{id}', [ArticleController::class, 'update']);
-Route::delete('/articles/{id}', [ArticleController::class, 'destroy']);
+
+// Route::get('/articles', [ArticleController::class, 'index']);
+// Route::post('/articles', [ArticleController::class, 'store']);
+// Route::get('/articles/{id}', [ArticleController::class, 'show']);
+// Route::put('/articles/{id}', [ArticleController::class, 'update']);
+// Route::delete('/articles/{id}', [ArticleController::class, 'destroy']);
+Route::group(['middleware' => 'auth:sanctum'], function () {
+    Route::resource('articles', ArticleController::class)->except(['create', 'edit']);
+    Route::resource('task', TaskController::class)->except(['create', 'edit']);
+});
+
+Route::get('/token', function (Request $request) {
+    $token = $request->session()->token();
+ 
+    // $token = csrf_token();
+    return response()->json($token);
+   
+});
