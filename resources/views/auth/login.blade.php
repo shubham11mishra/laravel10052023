@@ -45,3 +45,7 @@
         </div>
     </form>
 </x-guest-layout>
+
+
+
+x-navigation

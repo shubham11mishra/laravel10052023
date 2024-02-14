@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\ResumeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -151,6 +152,20 @@ Route::group(['prefix' => 's', 'as' => 's.'], function () {
         Route::get('/logout', [SLoginController::class, 'logout'])->name('logout');
     });
 });
+
+
+Route::get('/resume', [ResumeController::class, 'index'])->name('resume');
+
+Route::get('/resume_register', [ResumeController::class, 'create'])->name('resume.create');
+Route::post('/resumesave', [ResumeController::class, 'store'])->name('resume.store');
+Route::get('/resumes', [ResumeController::class, 'index'])->name('resume.index');
+Route::get('/resume/{id}', [ResumeController::class, 'show'])->name('resume.show');
+Route::get('/resume/{resume}/edit', [ResumeController::class, 'edit'])->name('resume.edit');
+Route::patch('/resume/{resume}', [ResumeController::class, 'update'])->name('resume.update');
+Route::delete('/resume/{resume}', [ResumeController::class, 'destroy'])->name('resume.destroy');
+
+Route::get('/resume/{id}/download', [ResumeController::class, 'download'])->name('resume.download');
+
 
 require __DIR__ . '/auth.php';
 
