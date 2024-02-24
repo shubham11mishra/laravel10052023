@@ -19,6 +19,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\ResumeController;
+use App\Http\Controllers\LoginUserController;
+use App\Http\Controllers\TaskListController;
+use App\Http\Controllers\TodolistController;
 
 /*
 |--------------------------------------------------------------------------
@@ -165,6 +168,24 @@ Route::patch('/resume/{resume}', [ResumeController::class, 'update'])->name('res
 Route::delete('/resume/{resume}', [ResumeController::class, 'destroy'])->name('resume.destroy');
 
 Route::get('/resume/{id}/download', [ResumeController::class, 'download'])->name('resume.download');
+
+Route::get('/index', [LoginUserController::class, 'index'])->name('login.index');
+Route::post('/loginuser', [LoginUserController::class, 'loginuser'])->name('login.user');
+Route::get('/registeruser', [LoginUserController::class, 'create'])->name('register.user');
+Route::post('/loginsave', [LoginUserController::class, 'store'])->name('login.save');
+Route::get('/logindashboard', [LoginUserController::class, 'dashboard'])->name('loginuser.dashboard');
+Route::get('/loginchangepassword', [LoginUserController::class, 'changepassword'])->name('user.changepassword');
+Route::post('/confirmpassword', [LoginUserController::class, 'confirmpassword'])->name('confirm.password');
+Route::get('/userlogout', [LoginUserController::class, 'destroy'])->name('user.logout');
+
+
+
+Route::get('/taskindex', [TaskListController::class, 'index' ])->name('task.index');
+Route::get('/create', [TaskListController::class, 'create' ])->name('task.create');
+Route::post('/save', [TaskListController::class, 'store' ])->name('task.save');
+Route::get('/task/{taskList}', [TaskListController::class, 'show' ])->name('task.show');
+Route::patch('/task/{taskList}', [TaskListController::class, 'update' ])->name('task.update');
+
 
 
 require __DIR__ . '/auth.php';

@@ -59,5 +59,6 @@ class DatabaseSeeder extends Seeder
         CheatSheetLanguageVersion::factory()->count(20)->create();
         CheatSheetHeaders::factory()->count(20)->create();
         CheatSheetCodes::factory()->count(20)->create();
+
     }
 }
