@@ -32,7 +32,7 @@
                                 <p>{{$task->description}}</p>
                                 <p>Status: <?= ($task->is_completed == 1) ? 'Completed' : 'Pending' ?></p>
                                 <span class="float-right">
-                                @if(Auth::guard('loginUser')->user()->id === $task->user_id)
+                                @if(Auth::guard('loginUser')->check() && Auth::guard('loginUser')->user()->id === $task->user_id)
                                     <a href="{{route('task.show', $task )}}" class="btn btn-primary">Edit</a>
                                    
                                 @else
