@@ -19,7 +19,6 @@ class TaskListController extends Controller
         //show all users list
         $taskLists = TaskList::all();
         return view('tasklist.index', compact('taskLists'));
-        
     }
 
     /**
@@ -43,7 +42,6 @@ class TaskListController extends Controller
         $taskList->user_id = Auth::guard('loginUser')->user()->id;
         $taskList->save();
         return redirect()->route('task.index');
-  
     }
 
     /**
@@ -51,7 +49,7 @@ class TaskListController extends Controller
      */
     public function show(TaskList $taskList)
     {
-        
+
         return view('tasklist.show', compact('taskList'));
     }
 
@@ -68,21 +66,26 @@ class TaskListController extends Controller
      */
     public function update(UpdateTaskListRequest $request, TaskList $taskList)
     {
-        
-        if (! Gate::allows('update-post', $taskList)) {
-            abort(403);
-        }
+
+       
+        // if (!Gate::allows('update-post', $taskList)) {
+        //     abort(403);
+        // }
 
         // $this->authorize('update', $taskList);
 
-        dd($taskList->user_id);
+        // dd($taskList->user_id);
 
+        // method  --- add this in authservice provider
+        //  Gate::define('update-tasklist', function (LoginUser $loginUser, TaskList $taskList) {
+            //     return $loginUser->id === $taskList->user_id;
+        // }
+        $this->authorize('update-tasklist', $taskList);
         $taskList->title = $request->title;
         $taskList->description = $request->description;
         $taskList->is_completed = $request->status;
         $taskList->save();
         return redirect()->route('task.index');
-
     }
 
     /**
@@ -90,6 +93,12 @@ class TaskListController extends Controller
      */
     public function destroy(TaskList $taskList)
     {
-        //
+        // method one --- add this in authservice provider
+        //  Gate::define('delete-tasklist', function (LoginUser $loginUser, TaskList $taskList) {
+        //     return $loginUser->id === $taskList->user_id;
+        // });
+        $this->authorize('delete-tasklist', $taskList);
+        $taskList->delete();
+        return redirect()->route('task.index');
     }
 }
