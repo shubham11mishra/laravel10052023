@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\TaskList;
 use App\Http\Requests\StoreTaskListRequest;
 use App\Http\Requests\UpdateTaskListRequest;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class TaskListController extends Controller
 {
@@ -66,7 +68,15 @@ class TaskListController extends Controller
      */
     public function update(UpdateTaskListRequest $request, TaskList $taskList)
     {
-        //
+        
+        if (! Gate::allows('update-post', $taskList)) {
+            abort(403);
+        }
+
+        // $this->authorize('update', $taskList);
+
+        dd($taskList->user_id);
+
         $taskList->title = $request->title;
         $taskList->description = $request->description;
         $taskList->is_completed = $request->status;
