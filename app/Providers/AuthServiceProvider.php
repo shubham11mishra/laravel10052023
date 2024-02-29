@@ -26,9 +26,16 @@ class AuthServiceProvider extends ServiceProvider
     public function boot(): void
     {
         //
-        Gate::define('update-tasklist', function (LoginUser $loginUser, TaskList $taskList) {
-          
+        Gate::define('view-tasklist', function (LoginUser $loginUser, TaskList $taskList) {
             return $loginUser->id === $taskList->user_id;
-        } );
+        });
+
+        Gate::define('update-tasklist', function (LoginUser $loginUser, TaskList $taskList) {
+            return $loginUser->id === $taskList->user_id;
+        });
+
+        Gate::define('delete-tasklist', function (LoginUser $loginUser, TaskList $taskList) {
+            return $loginUser->id === $taskList->user_id;
+        });
     }
 }

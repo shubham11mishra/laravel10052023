@@ -179,12 +179,15 @@ Route::post('/confirmpassword', [LoginUserController::class, 'confirmpassword'])
 Route::get('/userlogout', [LoginUserController::class, 'destroy'])->name('user.logout');
 
 
+Route::middleware('auth:loginUser')->group(function(){
+    Route::get('/taskindex', [TaskListController::class, 'index' ])->name('task.index');
+    Route::get('/create', [TaskListController::class, 'create' ])->name('task.create');
+    Route::post('/save', [TaskListController::class, 'store' ])->name('task.save');
+    Route::get('/task/{taskList}', [TaskListController::class, 'show' ])->name('task.show')->middleware('can:view-tasklist,taskList');
+    Route::patch('/task/{taskList}', [TaskListController::class, 'update' ])->name('task.update');
+    Route::delete('/task/{taskList}', [TaskListController::class, 'destroy' ])->name('task.destroy');
+});
 
-Route::get('/taskindex', [TaskListController::class, 'index' ])->name('task.index');
-Route::get('/create', [TaskListController::class, 'create' ])->name('task.create');
-Route::post('/save', [TaskListController::class, 'store' ])->name('task.save');
-Route::get('/task/{taskList}', [TaskListController::class, 'show' ])->name('task.show');
-Route::patch('/task/{taskList}', [TaskListController::class, 'update' ])->name('task.update');
 
 
 
