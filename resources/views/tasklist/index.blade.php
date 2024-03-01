@@ -47,10 +47,10 @@
                                     </div>
                                 
                                 @endif -->
-                            @can('update-tasklist', $task)
+                            @can('updatetasklist', $task)
                             <a href="{{route('task.show', $task )}}" class="btn btn-primary">Edit</a>
                             @endcan
-                            @can('delete-tasklist', $task)
+                            @can('deletetasklist', $task)
                             <form action="{{route('task.destroy', $task)}}" method="post">
                                 @csrf
                                 @method("DELETE")

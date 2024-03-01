@@ -3,64 +3,23 @@
 namespace App\Policies;
 
 use App\Models\TaskList;
-use App\Models\User;
+use App\Models\LoginUser;
 use Illuminate\Auth\Access\Response;
 
 class TaskListPolicy
 {
-    /**
-     * Determine whether the user can view any models.
-     */
-    public function viewAny(User $user): bool
-    {
-        //
+    public function updatetasklist(LoginUser $loginUser , TaskList $taskList){
+        return $loginUser->id === $taskList->user_id;
+
     }
 
-    /**
-     * Determine whether the user can view the model.
-     */
-    public function view(User $user, TaskList $taskList): bool
-    {
-        //
+    public function deletetasklist(LoginUser $loginUser , TaskList $taskList){
+        return $loginUser->id === $taskList->user_id;
+
     }
 
-    /**
-     * Determine whether the user can create models.
-     */
-    public function create(User $user): bool
-    {
-        //
-    }
+    public function viewtasklist(LoginUser $loginUser , TaskList $taskList){
+        return $loginUser->id === $taskList->user_id;
 
-    /**
-     * Determine whether the user can update the model.
-     */
-    public function update(User $user, TaskList $taskList): bool
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can delete the model.
-     */
-    public function delete(User $user, TaskList $taskList): bool
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, TaskList $taskList): bool
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, TaskList $taskList): bool
-    {
-        //
     }
 }

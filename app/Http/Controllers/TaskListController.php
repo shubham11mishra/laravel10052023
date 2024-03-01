@@ -68,19 +68,11 @@ class TaskListController extends Controller
     {
 
        
-        // if (!Gate::allows('update-post', $taskList)) {
+        // if (!Gate::allows('update-tasklist', $taskList)) {
         //     abort(403);
         // }
 
-        // $this->authorize('update', $taskList);
-
-        // dd($taskList->user_id);
-
-        // method  --- add this in authservice provider
-        //  Gate::define('update-tasklist', function (LoginUser $loginUser, TaskList $taskList) {
-            //     return $loginUser->id === $taskList->user_id;
-        // }
-        $this->authorize('update-tasklist', $taskList);
+        $this->authorize('updatetasklist', $taskList);
         $taskList->title = $request->title;
         $taskList->description = $request->description;
         $taskList->is_completed = $request->status;
@@ -97,7 +89,7 @@ class TaskListController extends Controller
         //  Gate::define('delete-tasklist', function (LoginUser $loginUser, TaskList $taskList) {
         //     return $loginUser->id === $taskList->user_id;
         // });
-        $this->authorize('delete-tasklist', $taskList);
+        $this->authorize('deletetasklist', $taskList);
         $taskList->delete();
         return redirect()->route('task.index');
     }

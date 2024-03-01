@@ -4,8 +4,10 @@ namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
 
+use App\Http\Controllers\TaskController;
 use App\Models\LoginUser;
 use App\Models\TaskList;
+use App\Policies\TaskListPolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -18,6 +20,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         //
+        TaskList::class => TaskListPolicy::class,
     ];
 
     /**
@@ -26,16 +29,16 @@ class AuthServiceProvider extends ServiceProvider
     public function boot(): void
     {
         //
-        Gate::define('view-tasklist', function (LoginUser $loginUser, TaskList $taskList) {
-            return $loginUser->id === $taskList->user_id;
-        });
+        // Gate::define('viewtasklist', function (LoginUser $loginUser, TaskList $taskList) {
+        //     return $loginUser->id === $taskList->user_id;
+        // });
 
-        Gate::define('update-tasklist', function (LoginUser $loginUser, TaskList $taskList) {
-            return $loginUser->id === $taskList->user_id;
-        });
+        // Gate::define('updatetasklist', function (LoginUser $loginUser, TaskList $taskList) {
+        //     return $loginUser->id === $taskList->user_id;
+        // });
 
-        Gate::define('delete-tasklist', function (LoginUser $loginUser, TaskList $taskList) {
-            return $loginUser->id === $taskList->user_id;
-        });
+        // Gate::define('deletetasklist', function (LoginUser $loginUser, TaskList $taskList) {
+        //     return $loginUser->id === $taskList->user_id;
+        // });
     }
 }
