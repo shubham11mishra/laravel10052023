@@ -15,4 +15,18 @@ class LoginUser extends Authenticatable
         'email',
         'password',
     ];
+
+
+    public function hasPermission($permission)
+    {
+        return $this->permissions()->where('slug', $permission)->exists();
+    }
+   
+        public function permissions()
+    {
+        return $this->belongsToMany(PermissionLoginUser::class, 'login_user_permissions', 'user_id', 'permission_id');
+    }
+
+
+   
 }

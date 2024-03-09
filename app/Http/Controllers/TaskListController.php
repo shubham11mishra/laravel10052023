@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\TaskList;
 use App\Http\Requests\StoreTaskListRequest;
 use App\Http\Requests\UpdateTaskListRequest;
+use App\Models\PermissionLoginUser;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -73,6 +74,11 @@ class TaskListController extends Controller
         // }
 
         $this->authorize('updatetasklist', $taskList);
+
+        // $loginUser = Auth::guard('loginUser')->user();
+        // if( !$loginUser->hasPermission('update-task')){
+        //     abort(403);
+        // }
         $taskList->title = $request->title;
         $taskList->description = $request->description;
         $taskList->is_completed = $request->status;
@@ -90,6 +96,11 @@ class TaskListController extends Controller
         //     return $loginUser->id === $taskList->user_id;
         // });
         $this->authorize('deletetasklist', $taskList);
+
+        // $loginUser = Auth::guard('loginUser')->user();
+        // if( !$loginUser->hasPermission('delete-task')){
+        //     abort(403);
+        // }
         $taskList->delete();
         return redirect()->route('task.index');
     }

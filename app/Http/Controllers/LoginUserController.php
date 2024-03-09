@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\LoginUser;
 use App\Http\Requests\StoreLoginUserRequest;
 use App\Http\Requests\UpdateLoginUserRequest;
+use App\Models\PermissionLoginUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -34,7 +35,8 @@ class LoginUserController extends Controller
         if(Auth::guard('loginUser')->check() == true){
             return view('loginView.dashboard');
         }else{
-            return view('loginView.register');
+            $permissions  = PermissionLoginUser::all();
+            return view('loginView.register', compact('permissions'));
         }
         
     }
@@ -49,8 +51,9 @@ class LoginUserController extends Controller
         $loginUser->name = $request->name;
         $loginUser->email = $request->email;
         $loginUser->password = bcrypt($request->password);
-        $loginUser->save();
-
+        $loginUser->save();   
+        $permissions = $request->input('permissions', []);  
+        $loginUser->permissions()->attach($permissions);
         if( Auth::guard('loginUser')->attempt(['email' => $request->email, 'password' => $request->password]) ){
             $request->session()->regenerate();
            return redirect()->route('loginuser.dashboard');
@@ -112,6 +115,12 @@ class LoginUserController extends Controller
             return redirect()->route('loginuser.dashboard');
         }
     }
+
+      
+    public function loginlist(){
+        $loginlist = LoginUser::all();
+        return view('loginView.loginlist', compact('loginlist'));
+    }
        
     /**
      * Display the specified resource.
@@ -124,17 +133,34 @@ class LoginUserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(LoginUser $loginUser)
+    public function edit(LoginUser $loginuser)
     {
         //
+
+        // dd($loginuser->permissions());
+        $permissions = PermissionLoginUser::all();
+        // dd( $permissions);
+        $userPermissions = $loginuser->permissions->pluck('id')->toArray();
+        return view('loginView.edit', compact('loginuser', 'permissions','userPermissions'));
+        // dd($loginuser);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateLoginUserRequest $request, LoginUser $loginUser)
+    public function update(UpdateLoginUserRequest $request, LoginUser $loginuser)
     {
         //
+
+        // dd($request);
+          $loginuser->name = $request->name;
+          $loginuser->email = $request->email;
+          $loginuser->password = $request->password;
+          $loginuser->save();
+          $permissions = $request->input('permissions', []);
+          $loginuser->permissions()->sync($permissions);
+          return redirect()->route('loginuser.dashboard');
+        
     }
 
     /**

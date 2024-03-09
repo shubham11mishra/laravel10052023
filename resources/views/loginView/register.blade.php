@@ -34,6 +34,19 @@
                      <label>Password</label>
                      <input type="password" name="password">
                   </div>
+
+                  @if(!empty($permissions))
+                      <div class="">
+                      <label for="permissions">Select Permissions:</label>
+                        @foreach ($permissions as $permission)
+                            <div>
+                                <input type="checkbox" name="permissions[]" value="{{ $permission->id }}">
+                                {{ $permission->name }}
+                            </div>
+                        @endforeach
+                      </div>
+                                  
+                  @endif
                   
 
                   <button type="submit">Register</button>

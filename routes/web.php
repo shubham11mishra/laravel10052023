@@ -20,8 +20,10 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\ResumeController;
 use App\Http\Controllers\LoginUserController;
+use App\Http\Controllers\PermissionLoginUserController;
 use App\Http\Controllers\TaskListController;
 use App\Http\Controllers\TodolistController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -170,9 +172,12 @@ Route::delete('/resume/{resume}', [ResumeController::class, 'destroy'])->name('r
 Route::get('/resume/{id}/download', [ResumeController::class, 'download'])->name('resume.download');
 
 Route::get('/index', [LoginUserController::class, 'index'])->name('login.index');
+Route::get('/loginlist', [LoginUserController::class, 'loginlist'])->name('login.list');
 Route::post('/loginuser', [LoginUserController::class, 'loginuser'])->name('login.user');
 Route::get('/registeruser', [LoginUserController::class, 'create'])->name('register.user');
 Route::post('/loginsave', [LoginUserController::class, 'store'])->name('login.save');
+ROUTE::get('/loginuser/{loginuser}' , [LoginUserController::class, 'edit'])->name('login.edit');
+ROUTE::PUT('/loginuser/{loginuser}' , [LoginUserController::class, 'update'])->name('login.update');
 Route::get('/logindashboard', [LoginUserController::class, 'dashboard'])->name('loginuser.dashboard');
 Route::get('/loginchangepassword', [LoginUserController::class, 'changepassword'])->name('user.changepassword');
 Route::post('/confirmpassword', [LoginUserController::class, 'confirmpassword'])->name('confirm.password');
@@ -188,8 +193,7 @@ Route::middleware('auth:loginUser')->group(function(){
     Route::delete('/task/{taskList}', [TaskListController::class, 'destroy' ])->name('task.destroy');
 });
 
-
-
+Route::resource('permissions', PermissionLoginUserController::class);
 
 require __DIR__ . '/auth.php';
 
