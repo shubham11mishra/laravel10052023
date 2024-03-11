@@ -158,7 +158,8 @@ class LoginUserController extends Controller
           $loginuser->password = $request->password;
           $loginuser->save();
           $permissions = $request->input('permissions', []);
-          $loginuser->permissions()->sync($permissions);
+        //   $loginuser->permissions()->sync($permissions);
+        $loginuser->permissions()->attach($permissions);
           return redirect()->route('loginuser.dashboard');
         
     }
