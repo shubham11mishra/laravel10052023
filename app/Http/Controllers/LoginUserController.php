@@ -46,12 +46,13 @@ class LoginUserController extends Controller
      */
     public function store(StoreLoginUserRequest $request)
     {
-        //
+        // 
         $loginUser = new LoginUser();
         $loginUser->name = $request->name;
         $loginUser->email = $request->email;
         $loginUser->password = bcrypt($request->password);
-        $loginUser->save();   
+        $loginUser->save();  
+        event( new \App\Events\RegisteredLoginUser($loginUser)); 
         $permissions = $request->input('permissions', []);  
         $loginUser->permissions()->attach($permissions);
         if( Auth::guard('loginUser')->attempt(['email' => $request->email, 'password' => $request->password]) ){
@@ -62,6 +63,8 @@ class LoginUserController extends Controller
         }
 
     }
+
+
 
     public function dashboard(){
 
@@ -119,6 +122,13 @@ class LoginUserController extends Controller
       
     public function loginlist(){
         $loginlist = LoginUser::all();
+
+        foreach($loginlist as $login){
+            dispatch(new \App\Jobs\SendEmailJob($login));
+            // event( new \App\Events\RegisteredLoginUser($login)); 
+        }
+        // $loginlist->dd($loginlist);
+        // dispatch(new \App\Jobs\SendEmailJob($loginlist));
         return view('loginView.loginlist', compact('loginlist'));
     }
        
